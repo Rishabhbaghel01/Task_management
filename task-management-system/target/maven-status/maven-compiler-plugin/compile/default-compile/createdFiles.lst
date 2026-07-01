@@ -1,0 +1,15 @@
+com\taskmanager\task_management_system\service\EmailService.class
+com\taskmanager\task_management_system\config\JwtUtil$ClaimsResolver.class
+com\taskmanager\task_management_system\controller\AuthController.class
+com\taskmanager\task_management_system\model\User.class
+com\taskmanager\task_management_system\service\UserDetailsServiceImpl.class
+com\taskmanager\task_management_system\repository\TaskRepository.class
+com\taskmanager\task_management_system\config\JwtAuthenticationFilter.class
+com\taskmanager\task_management_system\config\JwtUtil.class
+com\taskmanager\task_management_system\TaskManagementSystemApplication.class
+com\taskmanager\task_management_system\model\Task.class
+com\taskmanager\task_management_system\config\SecurityConfig.class
+com\taskmanager\task_management_system\service\TaskService.class
+com\taskmanager\task_management_system\controller\TaskController.class
+com\taskmanager\task_management_system\repository\UserRepository.class
+com\taskmanager\task_management_system\model\TaskStatus.class
