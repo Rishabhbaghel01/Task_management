@@ -1,5 +1,6 @@
 package com.taskmanager.task_management_system.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,42 +42,43 @@ public class TaskController {
 
 	// Endpoint to get all tasks
 	@GetMapping
-	public List<Task> getAllTasks() {
-		return taskService.getAllTasks();
+	public List<Task> getAllTasks(Principal principal) {
+		return taskService.getAllTasks(principal.getName());
 	}
 
 	// Endpoint to create a new task
 	@PostMapping
-	public ResponseEntity<?> createTask(@Valid @RequestBody Task task) throws MessagingException {
+	public ResponseEntity<?> createTask(@Valid @RequestBody Task task, Principal principal) throws MessagingException {
 		// Sending an email notification when a new task is created
 		// emailService.sendEmail("ea2584006@gmail.com", "New Task Created", "A new task has been added.");
-		return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(task));
+		return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(task, principal.getName()));
 	}
 
 	// Endpoint to update an existing task
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateTask(@PathVariable String id, @Valid @RequestBody Task updatedTask) {
-		return ResponseEntity.ok(taskService.updateTask(id, updatedTask));
+	public ResponseEntity<?> updateTask(@PathVariable String id, @Valid @RequestBody Task updatedTask, Principal principal) {
+		return ResponseEntity.ok(taskService.updateTask(id, updatedTask, principal.getName()));
 	}
 
 	// Endpoint to delete a task
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteTask(@PathVariable String id) {
-		taskService.deleteTask(id);
+	public ResponseEntity<?> deleteTask(@PathVariable String id, Principal principal) {
+		taskService.deleteTask(id, principal.getName());
 		return ResponseEntity.noContent().build();
 	}
 
 	// Endpoint to search tasks based on keyword and status
 	@GetMapping("/search")
 	public List<Task> searchTasks(@RequestParam(required = false) String keyword,
-			@RequestParam(required = false) TaskStatus status) {
+			@RequestParam(required = false) TaskStatus status, Principal principal) {
+		String username = principal.getName();
 		if (keyword != null && status != null) {
-			return taskRepository.findByTitleContainingIgnoreCaseAndStatus(keyword, status);
+			return taskRepository.findByUsernameAndTitleContainingIgnoreCaseAndStatus(username, keyword, status);
 		} else if (keyword != null) {
-			return taskRepository.findByTitleContainingIgnoreCase(keyword);
+			return taskRepository.findByUsernameAndTitleContainingIgnoreCase(username, keyword);
 		} else if (status != null) {
-			return taskRepository.findByStatus(status);
+			return taskRepository.findByUsernameAndStatus(username, status);
 		}
-		return taskRepository.findAll();
+		return taskRepository.findByUsername(username);
 	}
 }

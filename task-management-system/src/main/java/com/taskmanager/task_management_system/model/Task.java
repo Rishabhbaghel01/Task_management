@@ -33,5 +33,7 @@ public class Task {
 	@FutureOrPresent(message = "Due date must not be in the past")
 	private LocalDate dueDate;
 
+	private String username;
+
 	// Getters and Setters
 }

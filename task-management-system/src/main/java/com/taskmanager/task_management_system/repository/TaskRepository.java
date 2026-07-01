@@ -10,9 +10,11 @@ import com.taskmanager.task_management_system.model.TaskStatus;
 
 @Repository
 public interface TaskRepository extends MongoRepository<Task, String> {
-	List<Task> findByTitleContainingIgnoreCaseAndStatus(String keyword, TaskStatus status);
+	List<Task> findByUsername(String username);
 
-	List<Task> findByStatus(TaskStatus status);
+	List<Task> findByUsernameAndTitleContainingIgnoreCaseAndStatus(String username, String keyword, TaskStatus status);
 
-	List<Task> findByTitleContainingIgnoreCase(String keyword);
+	List<Task> findByUsernameAndStatus(String username, TaskStatus status);
+
+	List<Task> findByUsernameAndTitleContainingIgnoreCase(String username, String keyword);
 }
