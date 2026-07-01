@@ -40,18 +40,23 @@ public class AuthController {
 
 	@PostMapping("/login") // Login endpoint
 	public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-		String username = credentials.get("username");
+		String email = credentials.get("email");
 		String password = credentials.get("password");
 
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(401).body(Map.of("error", "Invalid username or password"));
+		User user = userRepository.findByEmail(email).orElse(null);
+		if (user == null) {
+			return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password"));
 		}
 
-		String token = jwtUtil.generateToken(username);
-		return ResponseEntity.ok(Map.of("token", token)); // Return generated token
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), password));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password"));
+		}
+
+		String token = jwtUtil.generateToken(user.getUsername());
+		return ResponseEntity.ok(Map.of("token", token, "username", user.getUsername())); // Return generated token and username
 	}
 
 	@PostMapping("/register") // Register endpoint

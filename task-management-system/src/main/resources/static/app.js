@@ -73,20 +73,20 @@ function showToast(message, type = 'success') {
 // Auth Logic
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = document.getElementById('login-username').value;
+    const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
     try {
         const res = await fetch(`${API_BASE}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ email, password })
         });
         const data = await res.json();
         
         if (res.ok && data.token) {
             currentToken = data.token;
-            currentUsername = username;
+            currentUsername = data.username; // Get the actual username from the backend
             localStorage.setItem('token', currentToken);
             localStorage.setItem('username', currentUsername);
             showDashboard();
