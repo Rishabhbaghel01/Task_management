@@ -46,6 +46,7 @@ public class AuthController {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(401).body(Map.of("error", "Invalid username or password"));
 		}
 
